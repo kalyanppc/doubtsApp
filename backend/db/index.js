@@ -13,11 +13,19 @@ const StudentSchema = new mongoose.Schema({
       email: String,
       password : String
 })
+const DoubtSchema = new mongoose.Schema({
+      title: String,
+      description: String,
+      answer: String,
+      isanswered : Boolean
+})
 
 const Admin = mongoose.model('Admin',AdminSchema);
 const Student = mongoose.model('Student',StudentSchema);
+const Doubt = mongoose.model('Doubt',DoubtSchema);
 
 module.exports = {
       Admin,
-      Student
+      Student,
+      Doubt
 }
