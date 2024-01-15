@@ -11,8 +11,17 @@ the functionalities which are being given are:
 
 This project will also be authenticated using the JWT's.
 
-# If anyone want to build this start with the backend which are goint to have routes:
+
+# If anyone want to build this start here:
+
+# DataBase
+- create a seperate folder for the Database and do this:
+- create admin and student Schemas which both are going to have 3 fields which are username, email and password.
+
+# Backend
 - signup(/signup/admin route): in which you will get the data in body the data is goint to be {email: the email, password: the set password}.
 - store these values in the dataBase and create the new admin. 
 - signup(/signup/admin route): in which you will get the data in body the data is goint to be {email: the email, password: the set password}.
 - store these values in the dataBase and create the new student.
+
+
