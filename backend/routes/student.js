@@ -2,6 +2,7 @@ const {Router} = require("express");
 const { Student, Doubt } = require("../db");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = require("../pass");
+const studentMiddleware = require("../middlewares/student");
 const router = Router();
 
 router.post("/signup",async (req,res)=>{
@@ -31,7 +32,7 @@ router.post("/signin",async (req,res)=>{
             })
       }
 })
-router.post("/doubt",async (req,res)=>{
+router.post("/doubt",studentMiddleware,async (req,res)=>{
       const {title,description} = req.body;
       const newDoubt = await Doubt.create({
             title,
@@ -44,7 +45,7 @@ router.post("/doubt",async (req,res)=>{
             msg: 'Your doubt has been added'
       })
 })
-router.get('/answers',async (req,res)=>{
+router.get('/answers',studentMiddleware,async (req,res)=>{
       /* hat you should do here is in the middleware you will get a token you get the username using that token and see the doubts _id's in their own array
       and get answers for those only */
       // also keept an is answered feild which will be kept false by default and when answered by the admin it should change to true and while filtering the 
