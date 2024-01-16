@@ -1,11 +1,11 @@
 const {Router} = require("express");
 const { Student, Doubt } = require("../db");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = require("../pass");
 const router = Router();
 
 router.post("/signup",async (req,res)=>{
-      const username = req.body.username;
-      const email = req.body.email;
-      const password = req.body.password;
+     const{username,email,password} = req.body;
       const newStudent = await Student.create({
             username,
             email,
@@ -16,9 +16,23 @@ router.post("/signup",async (req,res)=>{
             msg: 'Student creted succesfully'
       })
 })
+router.post("/signin",async (req,res)=>{
+      const {username,email,password} = req.body;
+      const student = await Student.findOne({
+            username,
+            email,
+            password
+      })
+      console.log(student);
+      if(student){
+            const token = jwt.sign({username,email},JWT_SECRET);
+            res.json({
+                  token
+            })
+      }
+})
 router.post("/doubt",async (req,res)=>{
-      const title = req.body.title;
-      const description = req.body.description;
+      const {title,description} = req.body;
       const newDoubt = await Doubt.create({
             title,
             description,
@@ -30,25 +44,6 @@ router.post("/doubt",async (req,res)=>{
             msg: 'Your doubt has been added'
       })
 })
-
-
-// This should be in the admin section in which you can keep it as answer router or something, which can be used for answering the doubt.
-
-// router.put("/updateDoubt",async (req,res)=>{
-//       const _id = req.headers._id;
-//       const answer = req.body.answer;
-//       const updatedDoubt = await Doubt.updateOne({
-//             _id
-//       },{
-//             answer
-//       });
-//       console.log(updatedDoubt);
-//       res.json({
-//             msg: "updated the answer"
-//       })
-// })
-
-
 router.get('/answers',async (req,res)=>{
       /* hat you should do here is in the middleware you will get a token you get the username using that token and see the doubts _id's in their own array
       and get answers for those only */

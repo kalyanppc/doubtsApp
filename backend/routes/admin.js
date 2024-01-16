@@ -1,11 +1,13 @@
 const {Router} = require("express");
-const { Admin } = require("../db");
+const { Admin, Doubt } = require("../db");
+const jwt = require("jsonwebtoken");
+const  JWT_SECRET = require("../pass");
+
+const adminMiddleware = require("../middlewares/admin");
 const router = Router();
 
 router.post("/signup",async (req,res)=>{
-      const username = req.body.username;
-      const email =  req.body.email;
-      const password = req.body.password;
+      const {username,email,password} = req.body;
       const newAdmin = await Admin.create({
             username,
             email,
@@ -15,6 +17,48 @@ router.post("/signup",async (req,res)=>{
       res.json({
             msg: "Admin created succesfully"
       })
+})
+router.post("/signin",async (req,res)=>{
+      const {username,email,password} = req.body;
+      console.log(username,email,password);
+      const admin = await Admin.findOne({
+            username,
+            email,
+            password
+      })
+      console.log(admin);
+      console.log(JWT_SECRET);
+      if(!admin){
+            return res.status(411).json({
+                  msg : "wrong credentials given"
+            })
+      }
+      const token = jwt.sign({username,email},JWT_SECRET);
+      res.json({
+            token
+      })
+})
+router.get('/doubts',adminMiddleware,async(req,res)=>{
+      const doubts = await Doubt.find({})
+      res.json({
+            doubts
+      })
+})
+router.put('/answer',adminMiddleware,async(req,res)=>{
+      const {_id,answer} = req.body;
+      try{const updatedAns = await Doubt.updateOne({
+            _id
+      },{
+            answer
+      })
+      console.log(updatedAns);
+      res.status(400).json({
+            msg: `You have answered the question of id number ${_id}`
+      })}catch(e){
+            res.status(403).json({
+                  msg: "wrong question _id number was given"
+            })
+      }
 })
 
 module.exports = router;
