@@ -11,7 +11,11 @@ const AdminSchema = new mongoose.Schema({
 const StudentSchema = new mongoose.Schema({
       username: String,
       email: String,
-      password : String
+      password : String,
+      askedDoubts :[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Doubt'
+      }]
 })
 const DoubtSchema = new mongoose.Schema({
       title: String,

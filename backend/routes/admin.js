@@ -40,16 +40,22 @@ router.post("/signin",async (req,res)=>{
 })
 router.get('/doubts',adminMiddleware,async(req,res)=>{
       const doubts = await Doubt.find({})
+      // Test this code which was changed (It should now only show unanswered doubts).
+      const unansweredDoubts = doubts.filter((doubt)=>{
+            return !doubt.isanswered;
+      })
       res.json({
-            doubts
+            unansweredDoubts
       })
 })
 router.put('/answer',adminMiddleware,async(req,res)=>{
+      // Test this code what was changed was that isanswered feild was added and when a question was answered the isanswered feild should become true.
       const {_id,answer} = req.body;
       try{const updatedAns = await Doubt.updateOne({
             _id
       },{
-            answer
+            answer,
+            isanswered: true
       })
       console.log(updatedAns);
       res.status(400).json({

@@ -10,7 +10,8 @@ router.post("/signup",async (req,res)=>{
       const newStudent = await Student.create({
             username,
             email,
-            password
+            password,
+            askedDoubts
       })
       console.log(newStudent);
       res.status(400).json({
@@ -22,7 +23,7 @@ router.post("/signin",async (req,res)=>{
       const student = await Student.findOne({
             username,
             email,
-            password
+            password,
       })
       console.log(student);
       if(student){
@@ -40,6 +41,13 @@ router.post("/doubt",studentMiddleware,async (req,res)=>{
             answer: "",
             isanswered: false
       })
+      const newDoubtId = newDoubt._id;
+      const studentUpdate = await Student.updateOne({
+            username: req.username
+      },{
+            $push:{askedDoubts: newDoubtId}
+      })
+      console.log(studentUpdate);
       console.log(newDoubt);
       res.status(400).json({
             msg: 'Your doubt has been added'
@@ -50,11 +58,18 @@ router.get('/answers',studentMiddleware,async (req,res)=>{
       and get answers for those only */
       // also keept an is answered feild which will be kept false by default and when answered by the admin it should change to true and while filtering the 
       // answers only the answers who have been answered should be displayed. Or keep seperate windows for answerd questions and unanswered questions.
-      const _id = req.headers._id;
-      const answers = await Doubt.findOne({_id});
-      console.log(answers);
+      const username = req.username;
+      const student = await Student.findOne({username:username})
+      console.log(student.askedDoubts);
+      const ids = student.askedDoubts;
+      const doubts = await Doubt.find({_id:{$in:ids}})
+      console.log(doubts);
+      let answeredDoubts = doubts.filter((doubt)=>{
+            return doubt.isanswered
+      });
+      console.log(answeredDoubts);
       res.json({
-            msg: "The answers are given"
+            answeredDoubts
       })
 })
 

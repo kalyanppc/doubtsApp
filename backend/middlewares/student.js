@@ -8,6 +8,7 @@ function studentMiddleware(req,res,next){
       try{
             const decodedValue = jwt.verify(jwtToken,JWT_SECRET);
             if(decodedValue.username){
+                  req.username = decodedValue.username;
                   next();
             }else{
                   res.status(411).json({
