@@ -17,7 +17,11 @@ router.post("/signup",async (req,res)=>{
       res.json({
             msg: "Admin created succesfully"
       })
-})
+},
+()=>{
+      console.log("hello world");
+}
+)
 router.post("/signin",async (req,res)=>{
       const {username,email,password} = req.body;
       console.log(username,email,password);

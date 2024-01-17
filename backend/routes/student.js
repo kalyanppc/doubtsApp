@@ -11,10 +11,10 @@ router.post("/signup",async (req,res)=>{
             username,
             email,
             password,
-            askedDoubts
+            askedDoubts: []
       })
       console.log(newStudent);
-      res.status(400).json({
+      res.status(200).json({
             msg: 'Student creted succesfully'
       })
 })

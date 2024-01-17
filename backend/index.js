@@ -1,9 +1,11 @@
 const express = require("express");
 const app = express();
+const cors = require('cors');
 const BodyParser = require ("body-parser");
 const adminRouter = require ("./routes/admin");
 const studentRouter = require("./routes/student")
 
+app.use(cors());
 app.use(BodyParser.json());
 app.use("/admin",adminRouter);
 app.use("/student",studentRouter);
