@@ -1,56 +1,25 @@
 import { useState } from "react";
+import { Signbox } from "./Signbox";
 
 export function AdminRoute() {
-      const [username,setUsername] = useState('');
-      const [email,setEmail] = useState('');
-      const [password,setPassword] = useState("");
-      let obj = {
-            username,
-            email,
-            password
-          }
-  return (
-    <div>
-      <input
-        type="text"
-        placeholder="username"
-        onChange={(e) => {
-          setUsername(e.target.value);
-        }}
-        value={username}
-      />
-      <br />
-      <input
-        type="text"
-        placeholder="email"
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        value={email}
-      />
-      <br />
-      <input
-        type="text"
-        placeholder="password"
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-        value={password}
-      />
-      <br />
-      <button
-        onClick={async () =>
-          await fetch("http://localhost:3000/admin/signup", {
-            method: "POST",
-            headers: {
-              "Content-type": "application/json",
+      const [signupAdmin,setSignupAdmin] = useState({username:"",email:"",password:""})
+      console.log(signupAdmin);
+      const admin = async (req,res)=>{
+          await fetch("http://localhost:3000/admin/signup",{
+            method: 'POST',
+            headers:{
+              'content-type': 'application-json'
             },
-            body: JSON.stringify(obj),
+            body:JSON.stringify(signupAdmin)
           })
-        }
-      >
-        signup
-      </button>
-    </div>
+      }
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+                  <Signbox changeState={setSignupAdmin} />
+                  <p>username: {signupAdmin.username}</p>
+                  <p>email: {signupAdmin.email}</p>
+                  <p>password: {signupAdmin.password}</p>
+                  <button onClick={admin}>signup</button>
+            </div>
   );
 }
