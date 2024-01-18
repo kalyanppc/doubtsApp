@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 export function Home() {
   const navigate = useNavigate();
   function adminPage() {
-    navigate("/admin");
+    navigate("/admin/signup");
   }
   function studentPage() {
-    navigate("/student");
+    navigate("/student/signup");
   }
   return (
     <div
